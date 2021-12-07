@@ -7,6 +7,21 @@ def build_tuple(string):
     return int(_list[0]), int(_list[1])
 
 
+def calc_step(pos_1, pos_2):
+    if pos_1 == pos_2:
+        return 0
+    elif pos_1 < pos_2:
+        return 1
+    else:
+        return -1
+
+
+def calc_distance(vector1, vector2):
+    vertical = max(vector1[1], vector2[1]) - min(vector1[1], vector2[1])
+    horizontal = max(vector1[0], vector2[0]) - min(vector1[0], vector2[0])
+    return max(vertical, horizontal)
+
+
 max_x: int = 0
 max_y: int = 0
 vectors = []
@@ -23,19 +38,12 @@ for y in range(max_y + 1):
     grid.append(array('i', (0,) * (max_x + 1)))
 
 for vector in vectors:
-    if vector[0][0] == vector[1][0]:
-        lowest = min(vector[0][1], vector[1][1])
-        highest = max(vector[0][1], vector[1][1]) + 1
+    distance = calc_distance(vector[0], vector[1])
+    x_step = calc_step(vector[0][0], vector[1][0])
+    y_step = calc_step(vector[0][1], vector[1][1])
 
-        for y in range(lowest, highest):
-            grid[y][vector[0][0]] += 1
-
-    if vector[0][1] == vector[1][1]:
-        lowest = min(vector[0][0], vector[1][0])
-        highest = max(vector[0][0], vector[1][0]) + 1
-
-        for x in range(lowest, highest):
-            grid[vector[0][1]][x] += 1
+    for i in range(distance + 1):
+        grid[vector[0][1] + (y_step * i)][vector[0][0] + (x_step * i)] += 1
 
 total = 0
 for y in range(len(grid)):
@@ -50,14 +58,3 @@ for y in range(len(grid)):
     print("")
 
 print(total)
-exit(0)
-# max_horizontal
-num_increased: int = 0
-for index in range(1, len(depths)):
-    last_depth = depths[index - 1]
-    depth = depths[index]
-
-    if last_depth < depth:
-        num_increased = num_increased + 1
-
-print(num_increased)

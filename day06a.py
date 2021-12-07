@@ -1,20 +1,15 @@
-import fileinput
+from sys import stdin
 
-depths = []
-for line in fileinput.input():
-    depths.append(int(line.rstrip()))
+fish = [int(x) for x in str(stdin.readlines()[0]).split(",")]
 
-num_increased: int = 0
-for index in range(1, len(depths)):
-    last_depth = depths[index - 1]
-    depth = depths[index]
+total_days = 80
 
-    if last_depth < depth:
-        num_increased = num_increased + 1
+for days in range(total_days):
+    current_fish = len(fish)
+    for i in range(current_fish):
+        fish[i] -= 1
+        if fish[i] == -1:
+            fish[i] = 6
+            fish.append(8)
 
-print(num_increased)
-
-
-
-
-
+print(len(fish))
